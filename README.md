@@ -1,11 +1,11 @@
-# My Planner 🌸
+# Daily Reminder 🌸
 
 A personal task planner web app built with **ASP.NET Core Web API** + **HTML/CSS/JavaScript**.
 
 ## Features
 - Login & personal profile setup
 - Add, edit, delete, search tasks
-- Priority levels: 🔥 High / 🌤️ Medium / 🌿 Low
+- Priority levels: High / Medium / Low
 - End date with Today / Week / Month / Year / All views
 - Subtasks (nest tasks under a parent)
 - Notes and file attachments

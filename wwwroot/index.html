@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Daily Reminder 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="pgLogin" style="display:flex">
+  <div class="acard">
+    <span class="ico">🌸</span>
+    <h1>Welcome back</h1>
+    <p>Log in to your Daily Reminder</p>
+    <label>Username</label>
+    <input type="text" id="lUser" placeholder="your username">
+    <label>Password</label>
+    <input type="password" id="lPass" placeholder="••••••••">
+    <button class="abtn" onclick="doLogin()">Log in 💕</button>
+    <p id="lerr" style="color:#ff6b94;margin-top:10px;font-size:13px;display:none">Please enter a username and password.</p>
+  </div>
+</div>
+
+<!-- PROFILE SETUP -->
+<div id="pgProfile" style="display:none">
+  <div class="acard">
+    <span class="ico">✨</span>
+    <h1>Set up your profile</h1>
+    <p>Just a few details before we start</p>
+    <label>Pick your avatar</label>
+    <div class="avrow">
+      <div class="avopt sel" data-av="🌸" onclick="pickAv(this)">🌸</div>
+      <div class="avopt" data-av="🌺" onclick="pickAv(this)">🌺</div>
+      <div class="avopt" data-av="🦋" onclick="pickAv(this)">🦋</div>
+      <div class="avopt" data-av="⭐" onclick="pickAv(this)">⭐</div>
+      <div class="avopt" data-av="🌙" onclick="pickAv(this)">🌙</div>
+      <div class="avopt" data-av="🎀" onclick="pickAv(this)">🎀</div>
+      <div class="avopt" data-av="🌈" onclick="pickAv(this)">🌈</div>
+      <div class="avopt" data-av="💫" onclick="pickAv(this)">💫</div>
+    </div>
+    <label>Your name</label>
+    <input type="text" id="pName" placeholder="e.g. Yourname">
+    <label>Email <small style="font-weight:400;color:var(--dim)">(optional)</small></label>
+    <input type="email" id="pEmail" placeholder="@email.com">
+    <button class="abtn" onclick="doProfile()">Let's go!</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="pgApp" style="display:none">
+<div class="app">
+  <div class="topbar">
+    <h1> Daily Reminder 🌸</h1>
+    <div class="topright">
+      <button class="ibtn" onclick="toggleSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <div class="ppill" onclick="openPM()">
+        <span class="pav" id="topAv">🌸</span>
+        <span class="pnm" id="topName">Me</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chips">
+    <div class="chip" id="cChip" onclick="toggleChip('completed')"><i class="fa-solid fa-check"></i> Completed</div>
+    <div class="chip" id="mChip" onclick="toggleChip('missed')"><i class="fa-solid fa-triangle-exclamation"></i> Missed</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" data-v="day" onclick="setView(this)">Today</div>
+    <div class="tab" data-v="week" onclick="setView(this)">Week</div>
+    <div class="tab" data-v="month" onclick="setView(this)">Month</div>
+    <div class="tab" data-v="year" onclick="setView(this)">Year</div>
+    <div class="tab" data-v="all" onclick="setView(this)">All ✨</div>
+  </div>
+
+  <div class="drow">
+    <button onclick="shift(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+    <span id="dlabel"></span>
+    <button onclick="shift(1)"><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
+
+  <div class="rinfo" id="rinfo"></div>
+
+  <div id="errBanner" class="err-banner" style="display:none"></div>
+
+  <div class="srow" id="searchRow" style="display:none">
+    <input type="text" id="searchInput" oninput="fetchAndRender()" placeholder="Search tasks...">
+  </div>
+
+  <div class="tlist" id="taskList"></div>
+</div>
+<button class="fab" onclick="openModal()">+</button>
+</div>
+
+<!-- Profile modal -->
+<div class="ov h" id="pmOv">
+  <div class="pbox">
+    <div class="pbig" id="pmAv">🌸</div>
+    <h3 id="pmName">Profile</h3>
+    <p class="psub">Your personal planner</p>
+    <div class="irow"><i class="fa-solid fa-user"></i><span id="pmNV">—</span></div>
+    <div class="irow"><i class="fa-solid fa-envelope"></i><span id="pmEV">—</span></div>
+    <div class="irow"><i class="fa-solid fa-list-check"></i><span id="pmSt">0 tasks</span></div>
+    <div class="pbtnrow">
+      <button class="plogout" onclick="doLogout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+      <button class="pclose" onclick="closePM()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Task modal -->
+<div class="overlay h" id="overlay">
+  <div class="modal">
+    <div class="mh"></div>
+    <h2 id="mTitle">New Task</h2>
+    <input type="hidden" id="fId">
+    <label>What do you need to do?</label>
+    <textarea id="fDesc" placeholder="e.g. Title"></textarea>
+    <label>How important?</label>
+    <div class="ppick">
+      <button type="button" data-p="Low" onclick="setPri(this)">Low</button>
+      <button type="button" data-p="Medium" onclick="setPri(this)" class="sM">Medium</button>
+      <button type="button" data-p="High" onclick="setPri(this)">High</button>
+    </div>
+    <input type="hidden" id="fPri" value="Medium">
+    <div class="frow">
+      <div>
+        <label>End date <small>— needed for date tabs!</small></label>
+        <input type="date" id="fDate" onchange="onDateChange()">
+        <div class="dwarn" id="dwarn"><br>Select date</div>
+      </div>
+      <div>
+        <label>Part of <small>(subtask, optional)</small></label>
+        <div class="prow">
+          <select id="fParent"><option value="">— None —</option></select>
+          <button type="button" class="smbtn" onclick="addParent()"><i class="fa-solid fa-plus"></i></button>
+          <button type="button" class="smbtn" onclick="delParent()"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+    <label>Note <small>(optional)</small></label>
+    <textarea id="fNote" placeholder="Any extra thoughts..."></textarea>
+    <label>Attach file <small>(optional)</small></label>
+    <input type="file" id="fFile">
+    <div id="fExFile" style="display:none;font-size:12px;color:var(--deep);margin-top:5px;">
+      <i class="fa-solid fa-paperclip"></i> Current: <a id="fExLink" href="#" target="_blank"><span id="fExNm"></span></a>
+    </div>
+    <label class="dchk"><input type="checkbox" id="fDone"> Already done! 🎉</label>
+    <div class="mbtns">
+      <button class="bcnl" onclick="closeModal()">Cancel</button>
+      <button class="bsave" onclick="saveTask()">Save 💖</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
